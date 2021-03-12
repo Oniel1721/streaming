@@ -8,12 +8,20 @@
 </head>
 <body>
     <h1>Client</h1>
+    <p>
+        Esta pagina recibe en tiempo real el streaming de la camara web del usuario que genera la transmicion
+    </p>
+    <img src="" alt="" id="streaming">
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        (function(io){
+        (function(d,io){
             'use strict'
-            const io = io()
-        })(io)
+
+            io.on('play stream', function(image){
+                d.getElementById('streaming').src = image
+            })
+
+        })(document,io())
     </script>
 </body>
 </html>

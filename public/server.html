@@ -23,7 +23,6 @@
                 $video = d.getElementById('video'),
                 $canvas = d.getElementById('canvas'),
                 context = $canvas.getContext('2d')
-            console.log(context)
 
             n.streaming = (
                 n.getUserMedia ||
@@ -57,7 +56,7 @@
             function streamVideo(context, $canvas, $video){
                 let outputStream = $canvas.toDataURL('image/jpeg', 0.2)
                 context.drawImage($video,0,0)
-                if(startCamera) io.emit('stream', outputStream)
+                if(startCamera) io.emit('streaming', outputStream)
 
                 playVideo(function(){
                     streamVideo(context, $canvas, $video)

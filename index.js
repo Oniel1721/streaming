@@ -26,4 +26,8 @@ http.listen(port, ()=>{
 
 io.on('connection', socket=>{
     console.log('new user connected')
+
+    socket.on('streaming', image=>{
+        io.emit('play stream', image)
+    })
 })
