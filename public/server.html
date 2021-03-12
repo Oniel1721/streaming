@@ -22,7 +22,8 @@
             let startCamera = false,
                 $video = d.getElementById('video'),
                 $canvas = d.getElementById('canvas'),
-                context = $canvas.getContext('d2')
+                context = $canvas.getContext('2d')
+            console.log(context)
 
             n.streaming = (
                 n.getUserMedia ||
