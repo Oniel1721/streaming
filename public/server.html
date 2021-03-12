@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server</title>
+</head>
+<body>
+    <h1>Server</h1>
+    <p>
+        Esta pagina transmite en tiempo real el streaming de la camara web
+    </p>
+    <video id="video" ></video>
+    <canvas id="canvas" width="720" height="480"></canvas>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        (function(d, io){
+            'use strict'
+            // console.log(io)
+
+            let startCamera = false,
+                $video = d.getElementById('video'),
+                $canvas = d.getElementById('canvas'),
+                context = $canvas.getContext('d2')
+
+            navigator.streaming = (
+                navigator.getUserMedia ||
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia ||
+                navigator.msGetUserMedia
+            )
+
+            navigator.streaming({
+                video: true, 
+                audio: true
+            },
+            function(stream){
+                startCemara = true
+                $video.src = window.URL.createObjectURL(stream)
+            },
+            function(err){
+                alert(`Web Cam Access error: ${err}`)
+            })
+        })(document,io())
+    </script>
+</body>
+</html>
