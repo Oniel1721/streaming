@@ -15,7 +15,7 @@
     <canvas id="canvas" width="720" height="480"></canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        (function(d, io){
+        (function(d,n,w,io){
             'use strict'
             // console.log(io)
 
@@ -24,25 +24,51 @@
                 $canvas = d.getElementById('canvas'),
                 context = $canvas.getContext('d2')
 
-            navigator.streaming = (
-                navigator.getUserMedia ||
-                navigator.webkitGetUserMedia ||
-                navigator.mozGetUserMedia ||
-                navigator.msGetUserMedia
+            n.streaming = (
+                n.getUserMedia ||
+                n.webkitGetUserMedia ||
+                n.mozGetUserMedia ||
+                n.msGetUserMedia
             )
 
-            navigator.streaming({
+            n.streaming({
                 video: true, 
                 audio: true
             },
             function(stream){
                 startCemara = true
-                $video.src = window.URL.createObjectURL(stream)
+                $video.src = w.URL.createObjectURL(stream)
             },
             function(err){
                 alert(`Web Cam Access error: ${err}`)
             })
-        })(document,io())
+
+            w.playVideo = (function(cb){
+                return w.requestAnimationFrame ||
+                    w.webkitRequestAnimationFrame ||
+                    w.mozRequestAnimationFrame ||
+                    w.msRequestAnimationFrame ||
+                    function(cb){
+                        setTimeout(cb, 1000/20)
+                    }
+            })()
+
+            function streamVideo(context, $canvas, $video){
+                let outputStream = $canvas.toDataURL('image/jpeg', 0.2)
+                context.drawImage($video,0,0)
+                if(startCamera) io.emit('stream', outputStream)
+
+                playVideo(function(){
+                    streamVideo(context, $canvas, $video)
+                })
+            }
+
+            w.addEventListener('load', function(e){
+                $video.autoplay = true
+                $video.style.display = 'none'
+                streamVideo(context, $canvas, $video)
+            })
+        })(document,navigator, window,io())
     </script>
 </body>
 </html>
